@@ -6,10 +6,10 @@ use GmodStore\LaravelWebhooks\Webhook;
 use GuzzleHttp\Client;
 use GuzzleHttp\Exception\ClientException;
 use Illuminate\Bus\Queueable;
-use Illuminate\Queue\SerializesModels;
-use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
+use Illuminate\Queue\InteractsWithQueue;
+use Illuminate\Queue\SerializesModels;
 
 class ExecuteWebhook implements ShouldQueue
 {
@@ -40,8 +40,9 @@ class ExecuteWebhook implements ShouldQueue
     /**
      * Execute the job.
      *
-     * @return void
      * @throws \GuzzleHttp\Exception\GuzzleException
+     *
+     * @return void
      */
     public function handle()
     {
