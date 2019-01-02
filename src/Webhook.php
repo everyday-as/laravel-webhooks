@@ -31,7 +31,7 @@ abstract class Webhook
         return 'GET';
     }
 
-    protected abstract function getUrl(): string;
+    abstract protected function getUrl(): string;
 
     /**
      * Get the user agent to use when making the request.
@@ -70,7 +70,6 @@ abstract class Webhook
      */
     protected function getBody()
     {
-        return null;
     }
 
     private function buildHeadersArray()
