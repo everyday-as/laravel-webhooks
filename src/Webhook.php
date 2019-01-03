@@ -75,6 +75,7 @@ abstract class Webhook
      */
     protected function getBody()
     {
+        //
     }
 
     private function buildHeadersArray()
