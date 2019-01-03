@@ -58,7 +58,7 @@ class ExecuteWebhook implements ShouldQueue
 
                 if (config('laravel-webhooks.log_failures')) {
                     Log::error(
-                        'Webhook failed after '.($this->retries > 1 ? $this->retries.' tries' : ''),
+                        'Webhook failed after '.($this->retries > 1 ? $this->retries.' tries' : '1 try'),
                         [
                             'webhook'   => $this->webhook,
                             'exception' => $exception,
