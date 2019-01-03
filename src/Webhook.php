@@ -103,10 +103,6 @@ abstract class Webhook
      */
     public function buildRequest(): Request
     {
-        if (!empty($body = $this->getBody())) {
-            $options['body'] = $body;
-        }
-
         return new Request(
             $this->getMethod(),
             $this->getUrl(),
