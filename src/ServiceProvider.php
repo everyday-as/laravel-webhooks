@@ -15,7 +15,7 @@ class ServiceProvider extends \Illuminate\Support\ServiceProvider
     {
         $this->publishes([
             __DIR__.'/config/laravel-webhooks.php' => config_path('laravel-webhooks.php'),
-        ]);
+        ], 'config');
 
         $this->app->singleton('laravel-webhooks:client', function ($app) {
             return new Client([
