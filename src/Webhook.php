@@ -27,6 +27,13 @@ abstract class Webhook
     }
 
     /**
+     * Get the URL to make the request to.
+     *
+     * @return string
+     */
+    abstract protected function getUrl(): string;
+
+    /**
      * Get the method to use when making the request.
      *
      * @return string
@@ -35,8 +42,6 @@ abstract class Webhook
     {
         return 'GET';
     }
-
-    abstract protected function getUrl(): string;
 
     /**
      * Get the user agent to use when making the request.

@@ -1,0 +1,28 @@
+<?php
+
+namespace DummyNamespace;
+
+use GmodStore\LaravelWebhooks\Webhook;
+
+class DummyClass extends Webhook
+{
+    /**
+     * Create a new webhook instance.
+     *
+     * @return void
+     */
+    public function __construct()
+    {
+        //
+    }
+
+    /**
+     * Get the URL to make the request to.
+     *
+     * @return string
+     */
+    public function getUrl(): string
+    {
+        return 'https://example.com';
+    }
+}
