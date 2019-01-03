@@ -7,7 +7,7 @@ return [
     | Log failures
     |--------------------------------------------------------------------------
     |
-    | Determines whether or not to log webhook failures.
+    | Configure whether or not to log webhook failures.
     |
     */
     'log_failures' => env('LARAVEL_WEBHOOKS_LOG_FAILURES', true),
