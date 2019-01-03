@@ -2,6 +2,8 @@
 
 namespace GmodStore\LaravelWebhooks;
 
+use GuzzleHttp\Client;
+
 class ServiceProvider extends \Illuminate\Support\ServiceProvider
 {
     /**
@@ -14,6 +16,12 @@ class ServiceProvider extends \Illuminate\Support\ServiceProvider
         $this->publishes([
             __DIR__.'/config/laravel-webhooks.php' => config_path('laravel-webhooks.php'),
         ]);
+
+        $this->app->singleton('laravel-webhooks:client', function($app) {
+            return new Client([
+                'timeout' => max($app['config']['laravel-webhooks']['http']['timeout'], 0)
+            ]);
+        });
     }
 
     /**

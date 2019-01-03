@@ -38,12 +38,33 @@ return [
 
     /*
     |--------------------------------------------------------------------------
-    | User agent
+    | HTTP Config
     |--------------------------------------------------------------------------
     |
-    | Configure the default user agent to use when making requests.
-    | NOTE: `?` is replaced by the class name of the webhook being executed.
+    | Configure options used in the requests made by this library.
     |
     */
-    'user_agent' => env('LARAVEL_WEBHOOKS_USER_AGENT', 'GmodStore-LaravelWebhooks/?'),
+    'http' => [
+        /*
+        |--------------------------------------------------------------------------
+        | User agent
+        |--------------------------------------------------------------------------
+        |
+        | Configure the default user agent to use when making requests.
+        | NOTE: `?` is replaced by the class name of the webhook being executed.
+        |
+        */
+        'user_agent' => env('LARAVEL_WEBHOOKS_USER_AGENT', 'GmodStore-LaravelWebhooks/?'),
+
+        /*
+        |--------------------------------------------------------------------------
+        | Request timeout
+        |--------------------------------------------------------------------------
+        |
+        | Configure the timeout for requests, in seconds.
+        |
+        */
+        'timeout' => 1,
+    ],
+
 ];

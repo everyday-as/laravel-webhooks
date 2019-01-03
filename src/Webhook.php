@@ -3,7 +3,7 @@
 namespace GmodStore\LaravelWebhooks;
 
 use GmodStore\LaravelWebhooks\Jobs\ExecuteWebhook;
-use GuzzleHttp\Exception\ClientException;
+use GuzzleHttp\Exception\RequestException;
 use GuzzleHttp\Psr7\Request;
 use Illuminate\Foundation\Bus\PendingDispatch;
 use Psr\Http\Message\ResponseInterface;
@@ -17,8 +17,13 @@ abstract class Webhook
     {
         $webhook = new static(...func_get_args());
 
-        return ExecuteWebhook::dispatch($webhook)
-            ->onQueue(config('laravel-webhooks.queue'));
+        $pending_dispatch = ExecuteWebhook::dispatch($webhook);
+
+        if (!empty($queue = config('laravel-webhooks.queue'))) {
+            $pending_dispatch->onQueue($queue);
+        }
+
+        return $pending_dispatch;
     }
 
     /**
@@ -40,7 +45,7 @@ abstract class Webhook
      */
     protected function getUserAgent(): string
     {
-        return str_replace('?', class_basename($this), config('laravel-webhooks.user_agent'));
+        return str_replace('?', class_basename($this), config('laravel-webhooks.http.user_agent'));
     }
 
     /**
@@ -104,7 +109,7 @@ abstract class Webhook
         );
     }
 
-    public function handleFailure(ClientException $exception)
+    public function handleFailure(RequestException $exception)
     {
         //
     }

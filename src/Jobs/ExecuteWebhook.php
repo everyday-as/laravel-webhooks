@@ -4,7 +4,7 @@ namespace GmodStore\LaravelWebhooks\Jobs;
 
 use GmodStore\LaravelWebhooks\Webhook;
 use GuzzleHttp\Client;
-use GuzzleHttp\Exception\ClientException;
+use GuzzleHttp\Exception\RequestException;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
@@ -46,9 +46,12 @@ class ExecuteWebhook implements ShouldQueue
      */
     public function handle()
     {
+        /** @var Client $client */
+        $client = app('laravel-webhooks:client');
+
         try {
-            $this->webhook->handleSuccess((new Client())->send($this->webhook->buildRequest()));
-        } catch (ClientException $exception) {
+            $this->webhook->handleSuccess($client->send($this->webhook->buildRequest()));
+        } catch (RequestException $exception) {
             if ($this->retries >= config('laravel-webhooks.retries.number')) {
                 $this->webhook->handleFailure($exception);
 
