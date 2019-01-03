@@ -104,7 +104,7 @@ abstract class Webhook
     public function buildRequest(): Request
     {
         return new Request(
-            $this->getMethod(),
+            strtoupper($this->getMethod()),
             $this->getUrl(),
             $this->buildHeadersArray(),
             $this->getBody()
