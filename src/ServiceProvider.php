@@ -15,7 +15,7 @@ class ServiceProvider extends \Illuminate\Support\ServiceProvider
     public function boot()
     {
         $this->publishes([
-            __DIR__ . '/config/laravel-webhooks.php' => config_path('laravel-webhooks.php'),
+            __DIR__.'/config/laravel-webhooks.php' => config_path('laravel-webhooks.php'),
         ], 'config');
 
         $this->app->singleton('laravel-webhooks:client', function ($app) {
@@ -39,7 +39,7 @@ class ServiceProvider extends \Illuminate\Support\ServiceProvider
     public function register()
     {
         $this->mergeConfigFrom(
-            __DIR__ . '/config/laravel-webhooks.php', 'laravel-webhooks'
+            __DIR__.'/config/laravel-webhooks.php', 'laravel-webhooks'
         );
     }
 }
