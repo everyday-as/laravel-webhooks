@@ -49,7 +49,7 @@ class WebhookSubscription extends Model
     }
 
     /**
-     * Scope the query to only include subscriptions to $webhook_type
+     * Scope the query to only include subscriptions to $webhook_type.
      *
      * @param Builder $query
      * @param string  $webhook_type
