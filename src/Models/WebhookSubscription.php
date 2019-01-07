@@ -2,6 +2,7 @@
 
 namespace GmodStore\LaravelWebhooks\Models;
 
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\MorphTo;
 use Illuminate\Foundation\Bus\PendingDispatch;
@@ -11,6 +12,10 @@ use Illuminate\Foundation\Bus\PendingDispatch;
  * @property-read int    $subscriber_id
  * @property-read string $webhook_type
  * @property-read array  $options
+ *
+ * @method static Builder to(int $webhook_type)
+ *
+ * @mixin Builder
  */
 class WebhookSubscription extends Model
 {
@@ -41,6 +46,19 @@ class WebhookSubscription extends Model
         parent::__construct($attributes);
 
         $this->setTable(config('laravel-webhooks.table_names.webhook_subscriptions'));
+    }
+
+    /**
+     * Scope the query to only include subscriptions to $webhook_type
+     *
+     * @param Builder $query
+     * @param string  $webhook_type
+     *
+     * @return Builder
+     */
+    public function scopeTo(Builder $query, string $webhook_type): Builder
+    {
+        return $query->where(compact('webhook_type'));
     }
 
     /**
