@@ -20,8 +20,8 @@ trait HasWebhookSubscriptions
     }
 
     /**
-     * @param string  $webhook_type
-     * @param array   $options
+     * @param string $webhook_type
+     * @param array  $options
      *
      * @return false|WebhookSubscription
      */

@@ -98,7 +98,7 @@ abstract class Webhook
     /**
      * Dispatch a job to execute this webhook.
      *
-     * @param  null $queue
+     * @param null $queue
      *
      * @return PendingDispatch
      */

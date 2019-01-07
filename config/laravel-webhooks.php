@@ -23,7 +23,7 @@ return [
     */
     'retries' => [
         'number' => 5,
-        'delay' => 30,
+        'delay'  => 30,
     ],
 
     /*
