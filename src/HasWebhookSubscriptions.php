@@ -2,6 +2,7 @@
 
 namespace GmodStore\LaravelWebhooks;
 
+use GmodStore\LaravelWebhooks\Models\WebhookSubscription;
 use Illuminate\Database\Eloquent\Relations\MorphMany;
 
 /**

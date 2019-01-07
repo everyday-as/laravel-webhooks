@@ -3,6 +3,7 @@
 namespace GmodStore\LaravelWebhooks;
 
 use GmodStore\LaravelWebhooks\Jobs\ExecuteWebhook;
+use GmodStore\LaravelWebhooks\Models\WebhookSubscription;
 use GuzzleHttp\Exception\RequestException;
 use GuzzleHttp\Psr7\Request;
 use Illuminate\Foundation\Bus\PendingDispatch;

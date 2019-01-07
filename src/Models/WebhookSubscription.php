@@ -1,6 +1,6 @@
 <?php
 
-namespace GmodStore\LaravelWebhooks;
+namespace GmodStore\LaravelWebhooks\Models;
 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\MorphTo;
