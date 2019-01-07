@@ -58,7 +58,7 @@ class WebhookSubscription extends Model
      */
     public function executeWebhook(): PendingDispatch
     {
-        /** @var Webhook $webhook */
+        /** @var \Gmodstore\LaravelWebhooks\Webhook $webhook */
         $webhook = new $this->webhook_type(...func_get_args());
 
         $webhook->setSubscription($this);
