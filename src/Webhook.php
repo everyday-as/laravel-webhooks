@@ -39,7 +39,7 @@ abstract class Webhook
      */
     protected function getMethod()
     {
-        return 'GET';
+        return 'POST';
     }
 
     /**
@@ -59,7 +59,7 @@ abstract class Webhook
      */
     protected function getContentType(): string
     {
-        return '';
+        return 'application/json';
     }
 
     /**
