@@ -6,6 +6,7 @@ use GmodStore\LaravelWebhooks\Jobs\ExecuteWebhook;
 use GuzzleHttp\Exception\RequestException;
 use GuzzleHttp\Psr7\Request;
 use Illuminate\Foundation\Bus\PendingDispatch;
+use Illuminate\Support\Facades\Log;
 use Psr\Http\Message\ResponseInterface;
 
 abstract class Webhook
@@ -128,7 +129,15 @@ abstract class Webhook
 
     public function handleFailure(RequestException $exception)
     {
-        //
+        if (config('laravel-webhooks.log_failures')) {
+            Log::error(
+                'Webhook failed',
+                [
+                    'webhook'   => $this,
+                    'exception' => $exception,
+                ]
+            );
+        }
     }
 
     public function handleSuccess(ResponseInterface $response)

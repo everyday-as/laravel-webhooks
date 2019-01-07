@@ -10,7 +10,6 @@ use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Queue\SerializesModels;
-use Illuminate\Support\Facades\Log;
 
 class ExecuteWebhook implements ShouldQueue
 {
@@ -55,16 +54,6 @@ class ExecuteWebhook implements ShouldQueue
         } catch (RequestException $exception) {
             if ($this->retries >= config('laravel-webhooks.retries.number')) {
                 $this->webhook->handleFailure($exception);
-
-                if (config('laravel-webhooks.log_failures')) {
-                    Log::error(
-                        'Webhook failed after '.($this->retries > 1 ? $this->retries.' tries' : '1 try'),
-                        [
-                            'webhook'   => $this->webhook,
-                            'exception' => $exception,
-                        ]
-                    );
-                }
 
                 return;
             }
