@@ -23,7 +23,7 @@ return [
     */
     'retries' => [
         'number' => 5,
-        'delay'  => 30,
+        'delay' => 30,
     ],
 
     /*
@@ -67,4 +67,15 @@ return [
         'timeout' => 1,
     ],
 
+    /*
+    |--------------------------------------------------------------------------
+    | Table names
+    |--------------------------------------------------------------------------
+    |
+    | Configure table names.
+    |
+    */
+    'table_names' => [
+        'webhook_subscriptions' => 'webhook_subscriptions',
+    ],
 ];

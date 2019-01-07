@@ -11,19 +11,16 @@ use Psr\Http\Message\ResponseInterface;
 abstract class Webhook
 {
     /**
+     * @var WebhookSubscription
+     */
+    protected $subscription;
+
+    /**
      * @return PendingDispatch
      */
     public static function execute(): PendingDispatch
     {
-        $webhook = new static(...func_get_args());
-
-        $pending_dispatch = ExecuteWebhook::dispatch($webhook);
-
-        if (!empty($queue = config('laravel-webhooks.queue'))) {
-            $pending_dispatch->onQueue($queue);
-        }
-
-        return $pending_dispatch;
+        return (new static(...func_get_args()))->dispatch();
     }
 
     /**
@@ -99,6 +96,24 @@ abstract class Webhook
     }
 
     /**
+     * Dispatch a job to execute this webhook.
+     *
+     * @param  null $queue
+     *
+     * @return PendingDispatch
+     */
+    public function dispatch($queue = null): PendingDispatch
+    {
+        $pending_dispatch = ExecuteWebhook::dispatch($this);
+
+        if (!empty($queue = $queue ?? config('laravel-webhooks.queue'))) {
+            $pending_dispatch->onQueue($queue);
+        }
+
+        return $pending_dispatch;
+    }
+
+    /**
      * @return Request
      */
     public function buildRequest(): Request
@@ -119,5 +134,15 @@ abstract class Webhook
     public function handleSuccess(ResponseInterface $response)
     {
         //
+    }
+
+    /**
+     * Set the "subscription" property to the `WebhookSubscription` associated with this `Webhook` instance.
+     *
+     * @param WebhookSubscription $subscription
+     */
+    final public function setSubscription(WebhookSubscription $subscription)
+    {
+        $this->subscription = $subscription;
     }
 }
