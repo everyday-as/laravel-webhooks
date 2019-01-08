@@ -60,7 +60,6 @@ class ExecuteWebhook implements ShouldQueue
 
             $pending_dispatch = self::dispatch($this->webhook, $this->attempts + 1);
 
-
             $delay = config('laravel-webhooks.backoff.delay');
 
             if ($exponential = config('laravel-webhooks.backoff.exponential')) {
