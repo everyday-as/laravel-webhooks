@@ -20,6 +20,15 @@ use Illuminate\Foundation\Bus\PendingDispatch;
 class WebhookSubscription extends Model
 {
     /**
+     * The attributes that should be cast to native types.
+     *
+     * @var array
+     */
+    protected $casts = [
+        'options' => 'array',
+    ];
+
+    /**
      * The attributes that are mass assignable.
      *
      * @var array
@@ -27,15 +36,6 @@ class WebhookSubscription extends Model
     protected $fillable = [
         'webhook_type',
         'options',
-    ];
-
-    /**
-     * The attributes that should be cast to native types.
-     *
-     * @var array
-     */
-    protected $casts = [
-        'options' => 'array',
     ];
 
     /**
