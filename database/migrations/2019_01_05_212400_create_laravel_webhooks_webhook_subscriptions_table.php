@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateLaravelWebhooksTables extends Migration
+class CreateLaravelWebhooksWebhookSubscriptionsTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,12 +13,10 @@ class CreateLaravelWebhooksTables extends Migration
      */
     public function up()
     {
-        $table_names = config('laravel-webhooks.table_names');
-
-        Schema::create($table_names['webhook_subscriptions'], function (Blueprint $table) {
+        Schema::create(config('laravel-webhooks.table_names.webhook_subscriptions'), function (Blueprint $table) {
             $table->increments('id');
             $table->morphs('subscriber');
-            $table->string('webhook_type');
+            $table->string('webhook_type')->index();
             $table->jsonb('options');
             $table->timestamps();
             $table->softDeletes();
@@ -32,8 +30,6 @@ class CreateLaravelWebhooksTables extends Migration
      */
     public function down()
     {
-        $table_names = config('laravel-webhooks.table_names');
-
-        Schema::dropIfExists($table_names['webhook_subscriptions']);
+        Schema::dropIfExists(config('laravel-webhooks.table_names.webhook_subscriptions'));
     }
 }
