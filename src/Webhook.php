@@ -75,7 +75,7 @@ abstract class Webhook
     /**
      * Get the request body.
      *
-     * @return string|array|null
+     * @return string|null|resource|\Psr\Http\Message\StreamInterface
      */
     protected function getBody()
     {
