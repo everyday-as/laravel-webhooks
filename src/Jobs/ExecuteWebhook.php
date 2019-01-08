@@ -23,18 +23,18 @@ class ExecuteWebhook implements ShouldQueue
     /**
      * @var int
      */
-    protected $retries;
+    protected $attempts;
 
     /**
      * Create a new job instance.
      *
      * @param Webhook $webhook
-     * @param int     $retries
+     * @param int     $attempts
      */
-    public function __construct(Webhook $webhook, int $retries = 1)
+    public function __construct(Webhook $webhook, int $attempts = 1)
     {
         $this->webhook = $webhook;
-        $this->retries = $retries;
+        $this->attempts = $attempts;
     }
 
     /**
@@ -52,17 +52,22 @@ class ExecuteWebhook implements ShouldQueue
         try {
             $this->webhook->handleSuccess($client->send($this->webhook->buildRequest()));
         } catch (RequestException $exception) {
-            if ($this->retries >= config('laravel-webhooks.retries.number')) {
+            if ($this->attempts >= config('laravel-webhooks.backoff.attempts')) {
                 $this->webhook->handleFailure($exception);
 
                 return;
             }
 
-            $pending_dispatch = self::dispatch($this->webhook, $this->retries + 1);
+            $pending_dispatch = self::dispatch($this->webhook, $this->attempts + 1);
 
-            if (($delay = config('laravel-webhooks.retries.delay')) > 0) {
-                $pending_dispatch->delay($delay);
+
+            $delay = config('laravel-webhooks.backoff.delay');
+
+            if ($exponential = config('laravel-webhooks.backoff.exponential')) {
+                $delay = min($exponential['max_delay'], $delay * ($this->attempts ** $exponential['exponent']));
             }
+
+            $pending_dispatch->delay($delay);
         }
     }
 }

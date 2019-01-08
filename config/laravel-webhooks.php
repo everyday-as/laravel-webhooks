@@ -14,16 +14,23 @@ return [
 
     /*
     |--------------------------------------------------------------------------
-    | Retries
+    | Backoff
     |--------------------------------------------------------------------------
     |
-    | Configure whether or not to retry failed webhook executions,
-    | the number of retries and delay (in seconds) to wait between retries
+    | Configure whether or not to retry failed webhook executions, the number
+    | of attempts and delay (in seconds) between attempts. In the case that
+    | exponential backoff is enabled "delay" is used as the initial delay.
+    | Setting "exponential" to false will disable exponential backoff, and
+    | setting "attempts" to 0 will disable backoff entirely.
     |
     */
-    'retries' => [
-        'number' => 5,
-        'delay'  => 30,
+    'backoff' => [
+        'delay' => 30,
+        'attempts' => 5,
+        'exponential' => [
+            'exponent' => 2,
+            'max_delay' => 300,
+        ]
     ],
 
     /*
@@ -38,33 +45,19 @@ return [
 
     /*
     |--------------------------------------------------------------------------
-    | HTTP Config
+    | Guzzle Config
     |--------------------------------------------------------------------------
     |
-    | Configure options used in the requests made by this library.
+    | Configure the options passed to the shared guzzle client used to execute
+    | all webhook requests.
     |
     */
-    'http' => [
-        /*
-        |--------------------------------------------------------------------------
-        | User agent
-        |--------------------------------------------------------------------------
-        |
-        | Configure the default user agent to use when making requests.
-        | NOTE: `?` is replaced by the class name of the webhook being executed.
-        |
-        */
-        'user_agent' => env('LARAVEL_WEBHOOKS_USER_AGENT', 'GmodStore-LaravelWebhooks/?'),
-
-        /*
-        |--------------------------------------------------------------------------
-        | Request timeout
-        |--------------------------------------------------------------------------
-        |
-        | Configure the timeout for requests, in seconds.
-        |
-        */
+    'guzzle' => [
         'timeout' => 1,
+
+        'headers' => [
+            'User-Agent' => env('LARAVEL_WEBHOOKS_USER_AGENT', 'GmodStore/LaravelWebhooks')
+        ]
     ],
 
     /*
