@@ -43,16 +43,6 @@ abstract class Webhook
     }
 
     /**
-     * Get the user agent to use when making the request.
-     *
-     * @return string
-     */
-    protected function getUserAgent(): string
-    {
-        return str_replace('?', class_basename($this), config('laravel-webhooks.http.user_agent'));
-    }
-
-    /**
      * Get the content type for the request.
      *
      * @return string
@@ -60,6 +50,11 @@ abstract class Webhook
     protected function getContentType(): string
     {
         return 'application/json';
+    }
+
+    protected function getType(): string
+    {
+        return str_replace_last('Webhook', '', class_basename(static::class));
     }
 
     /**
@@ -79,22 +74,22 @@ abstract class Webhook
      */
     protected function getBody()
     {
-        //
+        return '{}';
     }
 
     private function buildHeadersArray()
     {
-        $headers = $this->getHeaders();
+        $headers = [];
 
-        if (!isset($headers['User-Agent'])) {
-            $headers['User-Agent'] = $this->getUserAgent();
-        }
-
-        if (!isset($headers['Content-Type']) && !empty($content_type = $this->getContentType())) {
+        if (!empty($content_type = $this->getContentType())) {
             $headers['Content-Type'] = $content_type;
         }
 
-        return $headers;
+        if ($type_header_name = config('laravel-webhooks.headers.webhook_type')) {
+            $headers[$type_header_name] = $this->getType();
+        }
+
+        return array_merge($headers, $this->getHeaders());
     }
 
     /**
@@ -134,7 +129,7 @@ abstract class Webhook
             Log::error(
                 'Webhook failed',
                 [
-                    'webhook'   => $this,
+                    'webhook' => $this,
                     'exception' => $exception,
                 ]
             );

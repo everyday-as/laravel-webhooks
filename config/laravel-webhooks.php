@@ -25,10 +25,10 @@ return [
     |
     */
     'backoff' => [
-        'delay'       => 30,
-        'attempts'    => 5,
+        'delay' => 30,
+        'attempts' => 5,
         'exponential' => [
-            'exponent'  => 2,
+            'exponent' => 2,
             'max_delay' => 300,
         ],
     ],
@@ -42,6 +42,19 @@ return [
     |
     */
     'queue' => env('LARAVEL_WEBHOOKS_QUEUE'),
+
+    /*
+    |--------------------------------------------------------------------------
+    | Headers
+    |--------------------------------------------------------------------------
+    |
+    | Configure the names of custom headers used by this library, set to false
+    | to disable.
+    |
+    */
+    'headers' => [
+        'webhook_type' => 'X-Webhook-Type'
+    ],
 
     /*
     |--------------------------------------------------------------------------
