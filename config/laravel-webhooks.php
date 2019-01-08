@@ -25,10 +25,10 @@ return [
     |
     */
     'backoff' => [
-        'delay' => 30,
-        'attempts' => 5,
+        'delay'       => 30,
+        'attempts'    => 5,
         'exponential' => [
-            'exponent' => 2,
+            'exponent'  => 2,
             'max_delay' => 300,
         ],
     ],
@@ -53,7 +53,7 @@ return [
     |
     */
     'headers' => [
-        'webhook_type' => 'X-Webhook-Type'
+        'webhook_type' => 'X-Webhook-Type',
     ],
 
     /*
