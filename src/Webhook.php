@@ -70,11 +70,11 @@ abstract class Webhook
     /**
      * Get the request body.
      *
-     * @return string|null|resource|\Psr\Http\Message\StreamInterface
+     * @return string|array|resource|\Psr\Http\Message\StreamInterface|null
      */
     protected function getBody()
     {
-        return '{}';
+        return [];
     }
 
     private function buildHeadersArray()
@@ -115,11 +115,17 @@ abstract class Webhook
      */
     public function buildRequest(): Request
     {
+        $body = $this->getBody();
+
+        if (is_array($body)) {
+            $body = \GuzzleHttp\json_encode($body);
+        }
+
         return new Request(
             strtoupper($this->getMethod()),
             $this->getUrl(),
             $this->buildHeadersArray(),
-            $this->getBody()
+            $body
         );
     }
 
