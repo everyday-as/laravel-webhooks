@@ -129,7 +129,7 @@ abstract class Webhook
             Log::error(
                 'Webhook failed',
                 [
-                    'webhook' => $this,
+                    'webhook'   => $this,
                     'exception' => $exception,
                 ]
             );
