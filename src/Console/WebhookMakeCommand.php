@@ -46,6 +46,6 @@ class WebhookMakeCommand extends GeneratorCommand
      */
     protected function getDefaultNamespace($rootNamespace)
     {
-        return $rootNamespace.'\Webhooks';
+        return $rootNamespace.'\Http\Webhooks';
     }
 }
