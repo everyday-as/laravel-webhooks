@@ -6,6 +6,8 @@ use GmodStore\LaravelWebhooks\Models\WebhookSubscription;
 use Illuminate\Database\Eloquent\Relations\MorphMany;
 
 /**
+ * @property-read \Illuminate\Database\Eloquent\Collection $webhook_subscriptions
+ *
  * @mixin \Illuminate\Database\Eloquent\Model
  */
 trait HasWebhookSubscriptions
