@@ -3,19 +3,19 @@
 namespace GmodStore\LaravelWebhooks\Models;
 
 use GuzzleHttp\Exception\RequestException;
-use function GuzzleHttp\Psr7\parse_request;
-use function GuzzleHttp\Psr7\str;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Psr\Http\Message\RequestInterface;
 use Psr\Http\Message\ResponseInterface;
+use function GuzzleHttp\Psr7\parse_request;
 use function GuzzleHttp\Psr7\parse_response;
+use function GuzzleHttp\Psr7\str;
 
 /**
  * @property-read string                 $webhook_type
  * @property-read int                    $subscription_id
- * @property-read boolean                $success
+ * @property-read bool                $success
  * @property-read RequestInterface       $request
  * @property-read ResponseInterface|null $response
  * @property-read WebhookSubscription    $subscription

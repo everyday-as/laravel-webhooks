@@ -95,6 +95,6 @@ return [
     */
     'table_names' => [
         'webhook_subscriptions' => 'webhook_subscriptions',
-        'webhook_deliveries' => 'webhook_deliveries',
+        'webhook_deliveries'    => 'webhook_deliveries',
     ],
 ];
