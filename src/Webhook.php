@@ -70,28 +70,30 @@ abstract class Webhook
     /**
      * Handle a failed delivery of the webhook.
      *
+     * @param Request          $request
      * @param RequestException $exception
      *
      * @return void
      */
-    public function handleFailure(RequestException $exception)
+    public function handleFailure(Request $request, RequestException $exception)
     {
         if (config('laravel-webhooks.log_deliveries')) {
-            $this->logDelivery(false, $exception);
+            $this->logDelivery($request, $exception);
         }
     }
 
     /**
      * Handle a successful delivery of the webhook.
      *
+     * @param Request           $request
      * @param ResponseInterface $response
      *
      * @return void
      */
-    public function handleSuccess(ResponseInterface $response)
+    public function handleSuccess(Request $request, ResponseInterface $response)
     {
         if (config('laravel-webhooks.log_deliveries')) {
-            $this->logDelivery(true, $response);
+            $this->logDelivery($request, $response);
         }
     }
 
@@ -158,22 +160,32 @@ abstract class Webhook
     }
 
     /**
-     * @param bool  $success
-     * @param mixed $result
+     * @param Request                            $request
+     * @param ResponseInterface|RequestException $result
      *
      * @return WebhookDelivery
      */
-    protected function logDelivery(bool $success, $result): WebhookDelivery
+    protected function logDelivery(Request $request, $result): WebhookDelivery
     {
+        if (!($success = $result instanceof ResponseInterface)) {
+            $result = $result->getResponse();
+        }
+
         return WebhookDelivery::create([
-            'webhook_type'    => static::class,
+            'webhook_type' => static::class,
             'subscription_id' => optional($this->subscription)->id,
-            'success'         => $success,
-            'result'          => $result,
+            'success' => $success,
+            'request' => $request,
+            'response' => $result,
         ]);
     }
 
-    private function buildHeadersArray()
+    /**
+     * Build the array of headers to send in the request.
+     *
+     * @return array
+     */
+    private function buildHeadersArray(): array
     {
         $headers = [];
 

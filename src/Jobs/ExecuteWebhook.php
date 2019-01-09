@@ -53,11 +53,13 @@ class ExecuteWebhook implements ShouldQueue
         /** @var Client $client */
         $client = app('laravel-webhooks:client');
 
+        $request = $this->webhook->buildRequest();
+
         try {
-            $this->webhook->handleSuccess($client->send($this->webhook->buildRequest()));
+            $this->webhook->handleSuccess($request, $client->send($request));
         } catch (RequestException $exception) {
             if ($this->attempts >= config('laravel-webhooks.backoff.attempts')) {
-                $this->webhook->handleFailure($exception);
+                $this->webhook->handleFailure($request, $exception);
 
                 return;
             }

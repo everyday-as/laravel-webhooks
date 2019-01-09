@@ -20,7 +20,8 @@ class CreateLaravelWebhooksWebhookDeliveriesTable extends Migration
             $table->string('webhook_type')->index();
             $table->unsignedInteger('subscription_id')->nullable();
             $table->boolean('success');
-            $table->longText('result');
+            $table->longText('request');
+            $table->longText('response')->nullable();
             $table->timestamps();
 
             $table->foreign('subscription_id')->references('id')->on($table_names['webhook_subscriptions'])->onDelete('cascade');

@@ -3,14 +3,22 @@
 namespace GmodStore\LaravelWebhooks\Models;
 
 use GuzzleHttp\Exception\RequestException;
+use function GuzzleHttp\Psr7\parse_request;
+use function GuzzleHttp\Psr7\str;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Psr\Http\Message\RequestInterface;
 use Psr\Http\Message\ResponseInterface;
+use function GuzzleHttp\Psr7\parse_response;
 
 /**
- * @property-read WebhookSubscription                $subscription
- * @property-read RequestException|ResponseInterface $result
+ * @property-read string                 $webhook_type
+ * @property-read int                    $subscription_id
+ * @property-read boolean                $success
+ * @property-read RequestInterface       $request
+ * @property-read ResponseInterface|null $response
+ * @property-read WebhookSubscription    $subscription
  *
  * @method static Builder to(int $webhook_type)
  *
@@ -36,7 +44,8 @@ class WebhookDelivery extends Model
         'webhook_type',
         'subscription_id',
         'success',
-        'result',
+        'request',
+        'response',
     ];
 
     /**
@@ -50,33 +59,51 @@ class WebhookDelivery extends Model
     }
 
     /**
-     * Set the "result" attribute.
+     * Set the "request" attribute.
+     *
+     * @param RequestInterface $value
+     *
+     * @return void
+     */
+    public function setRequestAttribute(RequestInterface $value): void
+    {
+        $this->attributes['request'] = str($value);
+    }
+
+    /**
+     * Get the "request" attribute.
+     *
+     * @param string $value
+     *
+     * @return RequestInterface
+     */
+    public function getRequestAttribute(string $value): RequestInterface
+    {
+        return parse_request($value);
+    }
+
+    /**
+     * Set the "response" attribute.
      *
      * @param RequestException|ResponseInterface $value
      *
      * @return void
      */
-    public function setResultAttribute($value)
+    public function setResponseAttribute(?ResponseInterface $value): void
     {
-        if (!($value instanceof RequestException) && !($value instanceof ResponseInterface)) {
-            throw new \InvalidArgumentException(
-                '"value" argument must be of type `RequestException` or `ResponseInterface`'
-            );
-        }
-
-        $this->attributes['result'] = serialize($value);
+        $this->attributes['response'] = null === $value ? null : str($value);
     }
 
     /**
-     * Get the "result" attribute.
+     * Get the "response" attribute.
      *
      * @param string $value
      *
-     * @return RequestException|ResponseInterface
+     * @return ResponseInterface|null
      */
-    public function getResultAttribute(string $value)
+    public function getResponseAttribute(?string $value): ?ResponseInterface
     {
-        return unserialize($value);
+        return null === $value ? null : parse_response($value);
     }
 
     /**
