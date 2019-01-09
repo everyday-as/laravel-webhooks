@@ -46,6 +46,10 @@ class ExecuteWebhook implements ShouldQueue
      */
     public function handle()
     {
+        if (!config('laravel-webhooks.enabled')) {
+            return;
+        }
+
         /** @var Client $client */
         $client = app('laravel-webhooks:client');
 
