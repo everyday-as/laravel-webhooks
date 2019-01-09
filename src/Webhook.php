@@ -172,11 +172,11 @@ abstract class Webhook
         }
 
         return WebhookDelivery::create([
-            'webhook_type' => static::class,
+            'webhook_type'    => static::class,
             'subscription_id' => optional($this->subscription)->id,
-            'success' => $success,
-            'request' => $request,
-            'response' => $result,
+            'success'         => $success,
+            'request'         => $request,
+            'response'        => $result,
         ]);
     }
 
