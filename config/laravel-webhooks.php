@@ -71,6 +71,8 @@ return [
         'headers' => [
             'User-Agent' => env('LARAVEL_WEBHOOKS_USER_AGENT', 'GmodStore/LaravelWebhooks'),
         ],
+
+        'proxy' => env('LARAVEL_WEBHOOKS_PROXY'),
     ],
 
     /*
