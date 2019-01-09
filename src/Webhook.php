@@ -166,10 +166,10 @@ abstract class Webhook
     protected function logDelivery(bool $success, $result): WebhookDelivery
     {
         return WebhookDelivery::create([
-            'webhook_type' => static::class,
+            'webhook_type'    => static::class,
             'subscription_id' => optional($this->subscription)->id,
-            'success' => $success,
-            'result' => $result
+            'success'         => $success,
+            'result'          => $result,
         ]);
     }
 

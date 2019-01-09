@@ -36,7 +36,7 @@ class WebhookDelivery extends Model
         'webhook_type',
         'subscription_id',
         'success',
-        'result'
+        'result',
     ];
 
     /**
