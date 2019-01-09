@@ -75,7 +75,7 @@ abstract class Webhook
      *
      * @return void
      */
-    public function handleFailure(Request $request, RequestException $exception)
+    public function handleFailure(Request $request, RequestException $exception): void
     {
         if (config('laravel-webhooks.log_deliveries')) {
             $this->logDelivery($request, $exception);
@@ -90,7 +90,7 @@ abstract class Webhook
      *
      * @return void
      */
-    public function handleSuccess(Request $request, ResponseInterface $response)
+    public function handleSuccess(Request $request, ResponseInterface $response): void
     {
         if (config('laravel-webhooks.log_deliveries')) {
             $this->logDelivery($request, $response);
@@ -119,7 +119,7 @@ abstract class Webhook
      *
      * @return string
      */
-    protected function getMethod()
+    protected function getMethod(): string
     {
         return 'POST';
     }
