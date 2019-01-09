@@ -36,10 +36,10 @@ return [
     */
     'backoff' => [
         'delay'       => 30,
-        'attempts'    => 5,
+        'attempts'    => 15,
         'exponential' => [
             'exponent'  => 2,
-            'max_delay' => 300,
+            'max_delay' => 43200,
         ],
     ],
 
