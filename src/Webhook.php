@@ -3,15 +3,18 @@
 namespace GmodStore\LaravelWebhooks;
 
 use GmodStore\LaravelWebhooks\Jobs\ExecuteWebhook;
+use GmodStore\LaravelWebhooks\Models\WebhookDelivery;
 use GmodStore\LaravelWebhooks\Models\WebhookSubscription;
 use GuzzleHttp\Exception\RequestException;
 use GuzzleHttp\Psr7\Request;
 use Illuminate\Foundation\Bus\PendingDispatch;
-use Illuminate\Support\Facades\Log;
+use Illuminate\Queue\SerializesModels;
 use Psr\Http\Message\ResponseInterface;
 
 abstract class Webhook
 {
+    use SerializesModels;
+
     /**
      * @var WebhookSubscription
      */
@@ -23,6 +26,83 @@ abstract class Webhook
     public static function execute(): PendingDispatch
     {
         return (new static(...func_get_args()))->dispatch();
+    }
+
+    /**
+     * Dispatch a job to execute this webhook.
+     *
+     * @param null $queue
+     *
+     * @return PendingDispatch
+     */
+    public function dispatch($queue = null): PendingDispatch
+    {
+        $pending_dispatch = ExecuteWebhook::dispatch($this);
+
+        if (!empty($queue = $queue ?? config('laravel-webhooks.queue'))) {
+            $pending_dispatch->onQueue($queue);
+        }
+
+        return $pending_dispatch;
+    }
+
+    /**
+     * Build the request this webhook should perform.
+     *
+     * @return Request
+     */
+    public function buildRequest(): Request
+    {
+        $body = $this->getBody();
+
+        if (is_array($body)) {
+            $body = \GuzzleHttp\json_encode($body);
+        }
+
+        return new Request(
+            strtoupper($this->getMethod()),
+            $this->getUrl(),
+            $this->buildHeadersArray(),
+            $body
+        );
+    }
+
+    /**
+     * Handle a failed delivery of the webhook.
+     *
+     * @param RequestException $exception
+     *
+     * @return void
+     */
+    public function handleFailure(RequestException $exception)
+    {
+        if (config('laravel-webhooks.log_deliveries')) {
+            $this->logDelivery(false, $exception);
+        }
+    }
+
+    /**
+     * Handle a successful delivery of the webhook.
+     *
+     * @param ResponseInterface $response
+     *
+     * @return void
+     */
+    public function handleSuccess(ResponseInterface $response)
+    {
+        if (config('laravel-webhooks.log_deliveries')) {
+            $this->logDelivery(true, $response);
+        }
+    }
+
+    /**
+     * Set the "subscription" property to the `WebhookSubscription` associated with this `Webhook` instance.
+     *
+     * @param WebhookSubscription $subscription
+     */
+    final public function setSubscription(WebhookSubscription $subscription)
+    {
+        $this->subscription = $subscription;
     }
 
     /**
@@ -77,6 +157,22 @@ abstract class Webhook
         return [];
     }
 
+    /**
+     * @param bool  $success
+     * @param mixed $result
+     *
+     * @return WebhookDelivery
+     */
+    protected function logDelivery(bool $success, $result): WebhookDelivery
+    {
+        return WebhookDelivery::create([
+            'webhook_type' => static::class,
+            'subscription_id' => optional($this->subscription)->id,
+            'success' => $success,
+            'result' => $result
+        ]);
+    }
+
     private function buildHeadersArray()
     {
         $headers = [];
@@ -90,70 +186,5 @@ abstract class Webhook
         }
 
         return array_merge($headers, $this->getHeaders());
-    }
-
-    /**
-     * Dispatch a job to execute this webhook.
-     *
-     * @param null $queue
-     *
-     * @return PendingDispatch
-     */
-    public function dispatch($queue = null): PendingDispatch
-    {
-        $pending_dispatch = ExecuteWebhook::dispatch($this);
-
-        if (!empty($queue = $queue ?? config('laravel-webhooks.queue'))) {
-            $pending_dispatch->onQueue($queue);
-        }
-
-        return $pending_dispatch;
-    }
-
-    /**
-     * @return Request
-     */
-    public function buildRequest(): Request
-    {
-        $body = $this->getBody();
-
-        if (is_array($body)) {
-            $body = \GuzzleHttp\json_encode($body);
-        }
-
-        return new Request(
-            strtoupper($this->getMethod()),
-            $this->getUrl(),
-            $this->buildHeadersArray(),
-            $body
-        );
-    }
-
-    public function handleFailure(RequestException $exception)
-    {
-        if (config('laravel-webhooks.log_failures')) {
-            Log::error(
-                'Webhook failed',
-                [
-                    'webhook'   => $this,
-                    'exception' => $exception,
-                ]
-            );
-        }
-    }
-
-    public function handleSuccess(ResponseInterface $response)
-    {
-        //
-    }
-
-    /**
-     * Set the "subscription" property to the `WebhookSubscription` associated with this `Webhook` instance.
-     *
-     * @param WebhookSubscription $subscription
-     */
-    final public function setSubscription(WebhookSubscription $subscription)
-    {
-        $this->subscription = $subscription;
     }
 }

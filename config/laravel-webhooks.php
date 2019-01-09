@@ -14,13 +14,13 @@ return [
 
     /*
     |--------------------------------------------------------------------------
-    | Log failures
+    | Log deliveries
     |--------------------------------------------------------------------------
     |
-    | Configure whether or not to log webhook failures.
+    | Configure whether or not to log webhook deliveries in the database.
     |
     */
-    'log_failures' => env('LARAVEL_WEBHOOKS_LOG_FAILURES', true),
+    'log_deliveries' => env('LARAVEL_WEBHOOKS_LOG_DELIVERIES', true),
 
     /*
     |--------------------------------------------------------------------------

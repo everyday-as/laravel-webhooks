@@ -4,6 +4,7 @@ namespace GmodStore\LaravelWebhooks\Models;
 
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\MorphTo;
 use Illuminate\Foundation\Bus\PendingDispatch;
 
@@ -69,6 +70,14 @@ class WebhookSubscription extends Model
     public function subscriber(): MorphTo
     {
         return $this->morphTo();
+    }
+
+    /**
+     * @return HasMany
+     */
+    public function deliveries(): HasMany
+    {
+        return $this->hasMany(WebhookDelivery::class);
     }
 
     /**
