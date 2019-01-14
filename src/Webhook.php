@@ -2,7 +2,7 @@
 
 namespace GmodStore\LaravelWebhooks;
 
-use GmodStore\LaravelWebhooks\Jobs\ExecuteWebhook;
+use GmodStore\LaravelWebhooks\Jobs\DeliverWebhook;
 use GmodStore\LaravelWebhooks\Models\WebhookDelivery;
 use GmodStore\LaravelWebhooks\Models\WebhookSubscription;
 use GuzzleHttp\Exception\RequestException;
@@ -21,23 +21,25 @@ abstract class Webhook
     protected $subscription;
 
     /**
+     * Construct and deliver a webhook of this type.
+     *
      * @return PendingDispatch
      */
     public static function execute(): PendingDispatch
     {
-        return (new static(...func_get_args()))->dispatch();
+        return (new static(...func_get_args()))->deliver();
     }
 
     /**
-     * Dispatch a job to execute this webhook.
+     * Dispatch a job to deliver this webhook.
      *
      * @param null $queue
      *
      * @return PendingDispatch
      */
-    public function dispatch($queue = null): PendingDispatch
+    public function deliver($queue = null): PendingDispatch
     {
-        $pending_dispatch = ExecuteWebhook::dispatch($this);
+        $pending_dispatch = DeliverWebhook::dispatch($this);
 
         if (!empty($queue = $queue ?? config('laravel-webhooks.queue'))) {
             $pending_dispatch->onQueue($queue);

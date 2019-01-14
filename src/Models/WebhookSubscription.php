@@ -90,6 +90,6 @@ class WebhookSubscription extends Model
 
         $webhook->setSubscription($this);
 
-        return $webhook->dispatch();
+        return $webhook->deliver();
     }
 }
