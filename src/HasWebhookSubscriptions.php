@@ -28,10 +28,24 @@ trait HasWebhookSubscriptions
      *
      * @return false|WebhookSubscription
      */
-    public function subscribeToWebhook($webhook_type, array $options)
+    public function subscribeToWebhook(string $webhook_type, array $options)
     {
         return $this
             ->webhook_subscriptions()
             ->save(new WebhookSubscription(compact('webhook_type', 'options')));
+    }
+
+    /**
+     * @param string $webhook_type
+     * @param mixed  ...$args
+     */
+    public function executeSubscriptionsTo(string $webhook_type, ...$args): void
+    {
+        $this->webhook_subscriptions()
+            ->to($webhook_type)
+            ->get()
+            ->each(function (WebhookSubscription $subscription) use ($args) {
+                call_user_func_array([$subscription, 'executeWebhook'], $args);
+            });
     }
 }
