@@ -4,6 +4,7 @@ namespace GmodStore\LaravelWebhooks;
 
 use GmodStore\LaravelWebhooks\Models\WebhookSubscription;
 use Illuminate\Database\Eloquent\Relations\MorphMany;
+use Illuminate\Foundation\Bus\PendingDispatch;
 
 /**
  * @property-read \Illuminate\Database\Eloquent\Collection $webhook_subscriptions
@@ -38,14 +39,17 @@ trait HasWebhookSubscriptions
     /**
      * @param string $webhook_type
      * @param mixed  ...$args
+     *
+     * @return PendingDispatch[]
      */
-    public function executeSubscriptionsTo(string $webhook_type, ...$args): void
+    public function executeSubscriptionsTo(string $webhook_type, ...$args): array
     {
-        $this->webhook_subscriptions()
+        return $this->webhook_subscriptions()
             ->to($webhook_type)
             ->get()
-            ->each(function (WebhookSubscription $subscription) use ($args) {
-                call_user_func_array([$subscription, 'executeWebhook'], $args);
-            });
+            ->map(function (WebhookSubscription $subscription) use ($args) {
+                return call_user_func_array([$subscription, 'executeWebhook'], $args);
+            })
+            ->toArray();
     }
 }
