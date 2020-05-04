@@ -9,6 +9,7 @@ use GuzzleHttp\Exception\RequestException;
 use GuzzleHttp\Psr7\Request;
 use Illuminate\Foundation\Bus\PendingDispatch;
 use Illuminate\Queue\SerializesModels;
+use Illuminate\Support\Str;
 use Psr\Http\Message\ResponseInterface;
 
 abstract class Webhook
@@ -138,7 +139,7 @@ abstract class Webhook
 
     protected function getType(): string
     {
-        return str_replace_last('Webhook', '', class_basename(static::class));
+        return Str::replaceLast('Webhook', '', class_basename(static::class));
     }
 
     /**
