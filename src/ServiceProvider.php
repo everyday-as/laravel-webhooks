@@ -37,7 +37,8 @@ class ServiceProvider extends \Illuminate\Support\ServiceProvider
     public function register(): void
     {
         $this->mergeConfigFrom(
-            __DIR__.'/../config/laravel-webhooks.php', 'laravel-webhooks'
+            __DIR__.'/../config/laravel-webhooks.php',
+            'laravel-webhooks'
         );
 
         $this->app->singleton('laravel-webhooks:client', function ($app) {

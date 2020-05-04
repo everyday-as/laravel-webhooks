@@ -13,7 +13,10 @@ use Illuminate\Queue\SerializesModels;
 
 class DeliverWebhook implements ShouldQueue
 {
-    use Dispatchable, InteractsWithQueue, Queueable, SerializesModels;
+    use Dispatchable;
+    use InteractsWithQueue;
+    use Queueable;
+    use SerializesModels;
 
     /**
      * @var Webhook
