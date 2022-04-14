@@ -16,7 +16,7 @@ abstract class Webhook
 {
     use SerializesModels;
 
-    protected WebhookSubscription $subscription;
+    protected ?WebhookSubscription $subscription = null;
 
     /**
      * Construct and deliver a webhook of this type.
