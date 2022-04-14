@@ -2,11 +2,7 @@
 
 namespace GmodStore\LaravelWebhooks\Models;
 
-use GuzzleHttp\Exception\RequestException;
 use GuzzleHttp\Psr7\Message;
-use function GuzzleHttp\Psr7\parse_request;
-use function GuzzleHttp\Psr7\parse_response;
-use function GuzzleHttp\Psr7\str;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
