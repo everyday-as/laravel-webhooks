@@ -16,10 +16,7 @@ abstract class Webhook
 {
     use SerializesModels;
 
-    /**
-     * @var WebhookSubscription
-     */
-    protected $subscription;
+    protected WebhookSubscription $subscription;
 
     /**
      * Construct and deliver a webhook of this type.
@@ -105,7 +102,7 @@ abstract class Webhook
      *
      * @param WebhookSubscription $subscription
      */
-    final public function setSubscription(WebhookSubscription $subscription)
+    final public function setSubscription(WebhookSubscription $subscription): void
     {
         $this->subscription = $subscription;
     }

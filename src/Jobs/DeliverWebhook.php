@@ -18,15 +18,9 @@ class DeliverWebhook implements ShouldQueue
     use Queueable;
     use SerializesModels;
 
-    /**
-     * @var Webhook
-     */
-    protected $webhook;
+    protected Webhook $webhook;
 
-    /**
-     * @var int
-     */
-    protected $attempts;
+    protected int $attempts;
 
     /**
      * Create a new job instance.

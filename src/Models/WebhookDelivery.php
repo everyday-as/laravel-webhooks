@@ -3,6 +3,7 @@
 namespace GmodStore\LaravelWebhooks\Models;
 
 use GuzzleHttp\Exception\RequestException;
+use GuzzleHttp\Psr7\Message;
 use function GuzzleHttp\Psr7\parse_request;
 use function GuzzleHttp\Psr7\parse_response;
 use function GuzzleHttp\Psr7\str;
@@ -67,7 +68,7 @@ class WebhookDelivery extends Model
      */
     public function setRequestAttribute(RequestInterface $value): void
     {
-        $this->attributes['request'] = str($value);
+        $this->attributes['request'] = Message::toString($value);
     }
 
     /**
@@ -79,31 +80,31 @@ class WebhookDelivery extends Model
      */
     public function getRequestAttribute(string $value): RequestInterface
     {
-        return parse_request($value);
+        return Message::parseRequest($value);
     }
 
     /**
      * Set the "response" attribute.
      *
-     * @param RequestException|ResponseInterface $value
+     * @param ResponseInterface|null $value
      *
      * @return void
      */
     public function setResponseAttribute(?ResponseInterface $value): void
     {
-        $this->attributes['response'] = null === $value ? null : str($value);
+        $this->attributes['response'] = null === $value ? null : Message::toString($value);
     }
 
     /**
      * Get the "response" attribute.
      *
-     * @param string $value
+     * @param string|null $value
      *
      * @return ResponseInterface|null
      */
     public function getResponseAttribute(?string $value): ?ResponseInterface
     {
-        return null === $value ? null : parse_response($value);
+        return null === $value ? null : Message::ParseResponse($value);
     }
 
     /**
