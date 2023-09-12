@@ -77,7 +77,7 @@ class WebhookSubscription extends Model
      */
     public function deliveries(): HasMany
     {
-        return $this->hasMany(WebhookDelivery::class);
+        return $this->hasMany(WebhookDelivery::class, 'subscription_id');
     }
 
     /**
